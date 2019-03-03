@@ -1,0 +1,61 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<h1><span th:text="${entityName}"/> Form</h1>
+<form action="#" th:action="@{/form/user}" method="post" th:object="${entity}">
+<table >
+<tr th:each="field, itemStat: *{fields}">
+    <td th:text="${field.label}"></td>
+     <td>
+         <input type="hidden" th:file="*{fields[__${itemStat.index}__].masked}"/>
+         <input type="hidden" th:file="*{fields[__${itemStat.index}__].name}"/>
+         <input type="hidden"  th:field="*{fields[__${itemStat.index}__].label}"/>
+         <input type="hidden" th:field="*{fields[__${itemStat.index}__].fieldType}"/>
+         <input type="hidden" th:field="*{fields[__${itemStat.index}__].type}"/>
+
+
+            <th:block th:switch="${field.fieldType.name()}">
+                <div th:case="'TEXT'">
+                    <div th:if="*{fields[__${itemStat.index}__].masked}">
+                        <input type="password" th:field="*{fields[__${itemStat.index}__].value}"/>
+                    </div>
+                    <div th:unless="*{fields[__${itemStat.index}__].masked}">
+                        <input type="text" th:field="*{fields[__${itemStat.index}__].value}"/>
+                    </div>
+                </div>
+                <div th:case="'DATE'">
+                    <input type="datetime-local"  th:field="*{fields[__${itemStat.index}__].value}"/>
+                </div>
+                <div th:case="'INTEGRAL_NUMBER'">
+                    <div th:if="*{fields[__${itemStat.index}__].masked}">
+                        <input type="password" th:field="*{fields[__${itemStat.index}__].value}"/>
+                    </div>
+                    <div th:unless="*{fields[__${itemStat.index}__].masked}">
+                        <input type="number" th:field="*{fields[__${itemStat.index}__].value}"/>
+                    </div>
+                </div>
+                <div th:case="'DECIMAL_NUMBER'">
+                    <div th:if="*{fields[__${itemStat.index}__].masked}">
+                        <input type="password" th:field="*{fields[__${itemStat.index}__].value}"/>
+                    </div>
+                    <div th:unless="*{fields[__${itemStat.index}__].masked}">
+                        <input type="number" step="any"  th:field="*{fields[__${itemStat.index}__].value}"/>
+                    </div>
+                </div>
+                <div th:case="'BOOLEAN'">
+                    <input type="checkbox" th:field="*{fields[__${itemStat.index}__].value}"/>
+                </div>
+                <div th:case="'ENUMERATED'">
+                    <select th:field="*{fields[__${itemStat.index}__].value}">
+                        <option th:each="val: ${field.valueList}" th:value="${val}" th:text="${val}"/>
+                    </select>
+                </div>
+            </th:block>
+
+ </td>
+
+</tr>
+</table>
+    <input type="submit" >Submit</form>
+</form>
+
+</html>
